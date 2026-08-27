@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Flix | ميديا فلكس - إنتاج وتصوير سينمائي</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-base: #07070b;
+            --bg-elevated: rgba(18, 18, 28, 0.7);
+            --bg-elevated-hover: rgba(28, 28, 42, 0.85);
+            --primary: #8b3dff;
+            --primary-glow: rgba(139, 61, 255, 0.45);
+            --primary-light: #a86aff;
+            --accent-gold: #e5b869;
+            --accent-cyan: #38bdf8;
+            --text-main: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --border-glass: rgba(255, 255, 255, 0.08);
+            --border-highlight: rgba(168, 106, 255, 0.35);
+            --whatsapp-color: #25D366;
+            --radius-lg: 20px;
+            --radius-md: 14px;
+            --radius-sm: 8px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            font-family: 'Cairo', 'Outfit', -apple-system, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 24px 16px 40px;
+            position: relative;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(139, 61, 255, 0.18) 0%, transparent 60%),
+                radial-gradient(circle at 10% 30%, rgba(56, 189, 248, 0.07) 0%, transparent 40%),
+                radial-gradient(circle at 90% 70%, rgba(229, 184, 105, 0.06) 0%, transparent 45%);
+            background-attachment: fixed;
+        }
+
+        /* Ambient Lighting / Glow Orbs */
+        .ambient-light-top {
+            position: fixed;
+            top: -120px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 380px;
+            height: 380px;
+            background: radial-gradient(circle, rgba(139, 61, 255, 0.25) 0%, rgba(106, 39, 204, 0.08) 40%, transparent 70%);
+            filter: blur(50px);
+            pointer-events: none;
+            z-index: 0;
+            animation: pulseLight 8s ease-in-out infinite alternate;
+        }
+
+        .ambient-light-bottom {
+            position: fixed;
+            bottom: -150px;
+            right: 10%;
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(139, 61, 255, 0.15) 0%, transparent 70%);
+            filter: blur(60px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Subtle Cinema Grid Overlay */
+        .cinema-grid-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-size: 32px 32px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.015) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255, 255, 255, 0.015) 1px, transparent 1px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 460px;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Header & Logo Showcase */
+        .header-card {
+            background: var(--bg-elevated);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-lg);
+            padding: 32px 20px 24px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 25px rgba(139, 61, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            animation: slideDown 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .header-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary-light), var(--accent-gold), transparent);
+        }
+
+        /* Brand MF Emblem */
+        .logo-wrapper {
+            position: relative;
+            width: 130px;
+            height: 130px;
+            margin: 0 auto 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-halo {
+            position: absolute;
+            inset: -6px;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, transparent 0deg, var(--primary) 90deg, transparent 180deg, var(--accent-gold) 270deg, transparent 360deg);
+            opacity: 0.75;
+            animation: rotateHalo 12s linear infinite;
+            filter: blur(6px);
+        }
+
+        .logo-box {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 30%, #201938 0%, #0d0c15 80%);
+            border: 2px solid var(--border-highlight);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 
+                inset 0 0 20px rgba(139, 61, 255, 0.3),
+                0 8px 24px rgba(0, 0, 0, 0.6);
+            overflow: hidden;
+        }
+
+        .logo-svg {
+            width: 82px;
+            height: 82px;
+            filter: drop-shadow(0 4px 12px rgba(139, 61, 255, 0.6));
+            transition: transform 0.4s ease;
+        }
+
+        .logo-wrapper:hover .logo-svg {
+            transform: scale(1.06);
+        }
+
+        .brand-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(139, 61, 255, 0.15);
+            border: 1px solid rgba(139, 61, 255, 0.3);
+            color: var(--primary-light);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .brand-badge i {
+            font-size: 10px;
+            color: var(--accent-gold);
+        }
+
+        .brand-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: 2.5px;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, #ffffff 30%, #d8b4fe 70%, #e5b869 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 4px;
+            line-height: 1.2;
+        }
+
+        .brand-subtitle-ar {
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 6px;
+        }
+
+        .brand-desc {
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .brand-desc .dot {
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            background: var(--primary-light);
+            display: inline-block;
+        }
+
+        /* Social / Direct Connect Bar */
+        .actions-card {
+            background: var(--bg-elevated);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-lg);
+            padding: 16px;
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+        }
+
+        .social-pill {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            color: #fff;
+            font-size: 22px;
+            text-decoration: none;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .social-pill:hover {
+            transform: translateY(-3px) scale(1.05);
+        }
+
+        .social-pill.instagram {
+            background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+            box-shadow: 0 6px 20px rgba(214, 36, 159, 0.35);
+        }
+
+        .social-pill.email {
+            background: linear-gradient(135deg, #ea4335, #c5221f);
+            box-shadow: 0 6px 20px rgba(234, 67, 53, 0.35);
+        }
+
+        .social-pill.call {
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.35);
+        }
+
+        /* WhatsApp Direct Channels */
+        .whatsapp-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .wa-card {
+            background: var(--bg-elevated);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-md);
+            padding: 14px 12px;
+            text-decoration: none;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wa-card:hover {
+            background: var(--bg-elevated-hover);
+            border-color: rgba(37, 211, 102, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.15);
+        }
+
+        .wa-icon-box {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: rgba(37, 211, 102, 0.12);
+            border: 1px solid rgba(37, 211, 102, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--whatsapp-color);
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .wa-details {
+            text-align: right;
+            line-height: 1.3;
+        }
+
+        .wa-label {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .wa-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        /* Sections & Portfolio */
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 6px;
+            margin-bottom: 2px;
+            padding: 0 4px;
+        }
+
+        .section-title {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title i {
+            color: var(--primary-light);
+            font-size: 14px;
+        }
+
+        .section-subtitle-tag {
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.04);
+            padding: 2px 8px;
+            border-radius: 12px;
+            border: 1px solid var(--border-glass);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+        }
+
+        .portfolio-card {
+            background: var(--bg-elevated);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+            text-align: right;
+        }
+
+        .portfolio-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--border-highlight);
+            box-shadow: 0 10px 26px rgba(139, 61, 255, 0.2);
+        }
+
+        .portfolio-media {
+            height: 120px;
+            position: relative;
+            background: #111119;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .portfolio-media.cinematic-bg-1 {
+            background: radial-gradient(circle at 50% 50%, rgba(139, 61, 255, 0.25) 0%, rgba(12, 11, 20, 0.95) 100%);
+        }
+
+        .portfolio-media.cinematic-bg-2 {
+            background: radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.2) 0%, rgba(12, 11, 20, 0.95) 100%);
+        }
+
+        .portfolio-media.commercial-bg-1 {
+            background: radial-gradient(circle at 50% 50%, rgba(229, 184, 105, 0.22) 0%, rgba(12, 11, 20, 0.95) 100%);
+        }
+
+        .portfolio-media.commercial-bg-2 {
+            background: radial-gradient(circle at 50% 50%, rgba(236, 72, 153, 0.22) 0%, rgba(12, 11, 20, 0.95) 100%);
+        }
+
+        .portfolio-media.wedding-bg {
+            background: radial-gradient(circle at 50% 50%, rgba(244, 63, 94, 0.22) 0%, rgba(12, 11, 20, 0.95) 100%);
+        }
+
+        .portfolio-media.grad-bg {
+            background: radial-gradient(circle at 50% 50%, rgba(229, 184, 105, 0.22) 0%, rgba(12, 11, 20, 0.95) 100%);
+        }
+
+        .portfolio-media::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.1) 0%, rgba(7, 7, 11, 0.85) 100%);
+        }
+
+        .portfolio-icon {
+            font-size: 28px;
+            color: var(--primary-light);
+            z-index: 1;
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+
+        .portfolio-card:hover .portfolio-icon {
+            transform: scale(1.18);
+            color: var(--accent-gold);
+        }
+
+        .portfolio-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            z-index: 2;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(6px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: var(--text-secondary);
+            font-size: 10px;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .portfolio-badge i {
+            font-size: 9px;
+            color: var(--accent-gold);
+        }
+
+        .portfolio-content {
+            padding: 12px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .portfolio-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 3px;
+        }
+
+        .portfolio-tag {
+            font-size: 11px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* Save Contact (vCard) Action */
+        .save-card-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #7928ca 0%, #9333ea 50%, #6366f1 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: var(--radius-md);
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 25px rgba(139, 61, 255, 0.4);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .save-card-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 60%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+            transform: skewX(-25deg);
+            animation: shine 4s infinite;
+        }
+
+        .save-card-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(139, 61, 255, 0.55);
+        }
+
+        .save-card-btn:active {
+            transform: translateY(1px);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 12px 0;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .footer span {
+            color: var(--primary-light);
+            font-weight: 600;
+        }
+
+        /* Animations */
+        @keyframes rotateHalo {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes pulseLight {
+            0% { opacity: 0.7; transform: translateX(-50%) scale(0.95); }
+            100% { opacity: 1; transform: translateX(-50%) scale(1.1); }
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes shine {
+            0% { left: -100%; }
+            20% { left: 150%; }
+            100% { left: 150%; }
+        }
+
+        /* Toast feedback */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(20, 20, 30, 0.95);
+            backdrop-filter: blur(12px);
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 30px;
+            border: 1px solid var(--primary-light);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 100;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Ambient Cinematic Lighting & Grid -->
+    <div class="ambient-light-top"></div>
+    <div class="ambient-light-bottom"></div>
+    <div class="cinema-grid-bg"></div>
+
+    <div class="app-container">
+        
+        <!-- Header & Luxury MF Logo Section -->
+        <header class="header-card">
+            
+            <!-- Custom High-End Vector MF Emblem -->
+            <div class="logo-wrapper">
+                <div class="logo-halo"></div>
+                <div class="logo-box">
+                    <svg class="logo-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <!-- Linear Gradients for Luxury Emblem -->
+                            <linearGradient id="mfGradPrimary" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#ffffff" />
+                                <stop offset="35%" stop-color="#c084fc" />
+                                <stop offset="100%" stop-color="#7e22ce" />
+                            </linearGradient>
+                            <linearGradient id="mfGradAccent" x1="0%" y1="100%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="#e5b869" />
+                                <stop offset="60%" stop-color="#f59e0b" />
+                                <stop offset="100%" stop-color="#ffffff" />
+                            </linearGradient>
+                            <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#a855f7" stop-opacity="0.9" />
+                                <stop offset="50%" stop-color="#ec4899" stop-opacity="0.4" />
+                                <stop offset="100%" stop-color="#e5b869" stop-opacity="0.9" />
+                            </linearGradient>
+                            <filter id="glowFilter" x="-20%" y="-20%" width="140%" height="140%">
+                                <feGaussianBlur stdDeviation="3" result="blur" />
+                                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                            </filter>
+                        </defs>
+
+                        <!-- Outer Technical Cinema Ring -->
+                        <circle cx="60" cy="60" r="54" stroke="url(#ringGrad)" stroke-width="1.8" stroke-dasharray="8 4 2 4" opacity="0.6" />
+                        <circle cx="60" cy="60" r="48" stroke="rgba(255,255,255,0.12)" stroke-width="1" />
+
+                        <!-- Center Geometric Interlocking MF Monogram -->
+                        <!-- Letter 'M' -->
+                        <path d="M 28 82 L 28 38 L 46 62 L 58 46 L 58 82" 
+                              stroke="url(#mfGradPrimary)" 
+                              stroke-width="5.5" 
+                              stroke-linecap="round" 
+                              stroke-linejoin="round"
+                              filter="url(#glowFilter)" />
+
+                        <!-- Letter 'F' Interlocking -->
+                        <path d="M 64 82 L 64 38 L 92 38" 
+                              stroke="url(#mfGradAccent)" 
+                              stroke-width="5.5" 
+                              stroke-linecap="round" 
+                              stroke-linejoin="round"
+                              filter="url(#glowFilter)" />
+                        
+                        <!-- Middle Bar of 'F' with cinematic flare cut -->
+                        <path d="M 64 56 L 85 56" 
+                              stroke="url(#mfGradAccent)" 
+                              stroke-width="5" 
+                              stroke-linecap="round" />
+
+                        <!-- Cinema Aperture Accent Dots -->
+                        <circle cx="60" cy="22" r="2" fill="#e5b869" />
+                        <circle cx="60" cy="98" r="2" fill="#c084fc" />
+                        <circle cx="22" cy="60" r="2" fill="#c084fc" />
+                        <circle cx="98" cy="60" r="2" fill="#e5b869" />
+                    </svg>
+                </div>
+            </div>
+
+            <div class="brand-badge">
+                <i class="fas fa-certificate"></i>
+                <span>Official Production & Media</span>
+            </div>
+
+            <h1 class="brand-title">MEDIA FLIX</h1>
+            <h2 class="brand-subtitle-ar">ميديا فلكس للإنتاج والتصوير السينمائي</h2>
+            
+            <p class="brand-desc">
+                <span>تصوير سينمائي</span>
+                <span class="dot"></span>
+                <span>مونتاج احترافي</span>
+                <span class="dot"></span>
+                <span>إنتاج إعلامي</span>
+            </p>
+        </header>
+
+        <!-- Social & Quick Connect Buttons -->
+        <div class="actions-card">
+            <a href="https://www.instagram.com/media.flix.iq" target="_blank" rel="noopener noreferrer" class="social-pill instagram" title="Instagram">
+                <i class="fab fa-instagram"></i>
+            </a>
+            <a href="mailto:media.filx.iq@gmail.com" class="social-pill email" title="Email">
+                <i class="fas fa-envelope"></i>
+            </a>
+            <a href="tel:+9647838363613" class="social-pill call" title="اتصال مباشر">
+                <i class="fas fa-phone-alt"></i>
+            </a>
+        </div>
+
+        <!-- WhatsApp Direct Contact -->
+        <div class="whatsapp-section">
+            <a href="https://wa.me/9647838363613" target="_blank" rel="noopener noreferrer" class="wa-card">
+                <div class="wa-icon-box">
+                    <i class="fab fa-whatsapp"></i>
+                </div>
+                <div class="wa-details">
+                    <div class="wa-label">تواصل مباشر</div>
+                    <div class="wa-name">واتساب محمد</div>
+                </div>
+            </a>
+
+            <a href="https://wa.me/9647779780777" target="_blank" rel="noopener noreferrer" class="wa-card">
+                <div class="wa-icon-box">
+                    <i class="fab fa-whatsapp"></i>
+                </div>
+                <div class="wa-details">
+                    <div class="wa-label">تواصل مباشر</div>
+                    <div class="wa-name">واتساب علي</div>
+                </div>
+            </a>
+        </div>
+
+        <!-- Section 1: Cinematic Video -->
+        <div class="section-header">
+            <div class="section-title">
+                <i class="fas fa-video"></i>
+                <span>فيديو سينمائي</span>
+            </div>
+            <span class="section-subtitle-tag">Cinematic</span>
+        </div>
+        
+        <div class="portfolio-grid">
+            <div class="portfolio-card" onclick="showFeedback('جاري تجهيز معرض الفيديو السينمائي')">
+                <div class="portfolio-media cinematic-bg-1">
+                    <div class="portfolio-badge"><i class="fas fa-film"></i> 4K RAW</div>
+                    <i class="fas fa-play-circle portfolio-icon"></i>
+                </div>
+                <div class="portfolio-content">
+                    <div class="portfolio-name">فيديو سينمائي احترافي</div>
+                    <div class="portfolio-tag">Cinematic 4K Films</div>
+                </div>
+            </div>
+
+            <div class="portfolio-card" onclick="showFeedback('جاري تجهيز قسم كليبات وأفلام سينمائية')">
+                <div class="portfolio-media cinematic-bg-2">
+                    <div class="portfolio-badge"><i class="fas fa-clapperboard"></i> 8K Ultra</div>
+                    <i class="fas fa-film portfolio-icon"></i>
+                </div>
+                <div class="portfolio-content">
+                    <div class="portfolio-name">كليبات وأفلام وثائقية</div>
+                    <div class="portfolio-tag">Short Films & Clips</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: Commercial Advertisements -->
+        <div class="section-header">
+            <div class="section-title">
+                <i class="fas fa-bullhorn"></i>
+                <span>الإعلانات التجارية</span>
+            </div>
+            <span class="section-subtitle-tag">Commercial</span>
+        </div>
+        
+        <div class="portfolio-grid">
+            <div class="portfolio-card" onclick="showFeedback('جاري تجهيز معرض إعلانات المنتجات والشركات')">
+                <div class="portfolio-media commercial-bg-1">
+                    <div class="portfolio-badge"><i class="fas fa-ad"></i> TV & Web</div>
+                    <i class="fas fa-play-circle portfolio-icon"></i>
+                </div>
+                <div class="portfolio-content">
+                    <div class="portfolio-name">إعلانات الشركات والمنتجات</div>
+                    <div class="portfolio-tag">Brand & Product Ads</div>
+                </div>
+            </div>
+
+            <div class="portfolio-card" onclick="showFeedback('جاري تجهيز قسم إعلانات السوشيال ميديا والريلز')">
+                <div class="portfolio-media commercial-bg-2">
+                    <div class="portfolio-badge"><i class="fab fa-tiktok"></i> Reels</div>
+                    <i class="fas fa-mobile-screen portfolio-icon"></i>
+                </div>
+                <div class="portfolio-content">
+                    <div class="portfolio-name">إعلانات ريلز وسوشيال ميديا</div>
+                    <div class="portfolio-tag">Social Media Reels</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: Weddings & Graduations -->
+        <div class="section-header">
+            <div class="section-title">
+                <i class="fas fa-camera-retro"></i>
+                <span>جلسات الأعراس والتخرج</span>
+            </div>
+            <span class="section-subtitle-tag">Events</span>
+        </div>
+
+        <div class="portfolio-grid">
+            <div class="portfolio-card" onclick="showFeedback('جاري تجهيز قسم جلسات الأعراس')">
+                <div class="portfolio-media wedding-bg">
+                    <div class="portfolio-badge"><i class="fas fa-heart"></i> Luxury</div>
+                    <i class="fas fa-heart portfolio-icon" style="color: #f43f5e;"></i>
+                </div>
+                <div class="portfolio-content">
+                    <div class="portfolio-name">جلسات تصوير عرس</div>
+                    <div class="portfolio-tag">Wedding Sessions</div>
+                </div>
+            </div>
+
+            <div class="portfolio-card" onclick="showFeedback('جاري تجهيز قسم جلسات التخرج')">
+                <div class="portfolio-media grad-bg">
+                    <div class="portfolio-badge"><i class="fas fa-graduation-cap"></i> Exclusive</div>
+                    <i class="fas fa-graduation-cap portfolio-icon" style="color: #e5b869;"></i>
+                </div>
+                <div class="portfolio-content">
+                    <div class="portfolio-name">جلسات تخرج</div>
+                    <div class="portfolio-tag">Graduation Events</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Download vCard Action -->
+        <button onclick="downloadVCF()" class="save-card-btn" id="saveContactBtn">
+            <i class="fas fa-address-card"></i>
+            <span>حفظ جهة الاتصال في الهاتف</span>
+        </button>
+
+        <footer class="footer">
+            <p>© 2026 <span>Media Flix</span>. جميع الحقوق محفوظة</p>
+        </footer>
+
+    </div>
+
+    <!-- Feedback Toast -->
+    <div id="toast" class="toast">
+        <i class="fas fa-check-circle" style="color: #4ade80;"></i>
+        <span id="toastMsg">تم حفظ جهة الاتصال</span>
+    </div>
+
+    <script>
+        function showFeedback(msg) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMsg');
+            toastMsg.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        function downloadVCF() {
+            const vcfData = [
+                'BEGIN:VCARD',
+                'VERSION:3.0',
+                'FN:Media Flix - ميديا فلكس',
+                'ORG:Media Flix Cinematography & Production',
+                'TITLE:تصوير سينمائي ومونتاج احترافي',
+                'TEL;TYPE=WORK,VOICE;PREF:+9647838363613',
+                'TEL;TYPE=CELL,VOICE:+9647779780777',
+                'EMAIL;TYPE=PREF,INTERNET:media.filx.iq@gmail.com',
+                'URL:https://www.instagram.com/media.flix.iq',
+                'NOTE:Media Flix - تصوير سينمائي ومونتاج وإعلانات احترافية',
+                'END:VCARD'
+            ].join('\n');
+
+            const blob = new Blob([vcfData], { type: 'text/vcard;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'MediaFlix.vcf');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+
+            showFeedback('تم تنزيل بطاقة Media Flix بنجاح!');
+        }
+    </script>
+</body>
+</html>
